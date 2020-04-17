@@ -13,7 +13,7 @@ def proof_of_work(block):
     in an effort to find a number that is a valid proof
     :return: A valid proof for the provided block
     """
-    block_string = json.dumps(block, sort_keys=True).encode()
+    block_string = json.dumps(block, sort_keys=True)
     proof = 0
     while valid_proof(block_string, proof) is False:
         proof +=1
@@ -34,7 +34,8 @@ def valid_proof(block_string, proof):
     """
     # print(f'I will now check if {proof} is valid.')
     # guess = block_string + str(proof)
-    guess = f'{block_string}{proof}'.encode()
+    guess = block_string + str(proof)
+    guess = guess.encode()
     guess_hash = hashlib.sha256(guess).hexdigest()
     return guess_hash[:6] == '000000'
     
@@ -82,7 +83,7 @@ if __name__ == '__main__':
         # TODO: If the server responds with a 'message' 'New Block Forged'
         # add 1 to the number of coins mined and print it.  Otherwise,
         # print the message from the server.
-        if data.get('message') == 'New Block Forged':
+        if 'block' in data:
             coins_mined +=1
             print('Total Coins Mined: ' + str(coins_mined))
         else:
